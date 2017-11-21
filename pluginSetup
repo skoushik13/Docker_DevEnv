@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+ARG INTELLIJ_VERSION=2017.2.6
+
+function delayedPluginInstall {
+    sudo mkdir -p /data/dev/.IdeaIC$INTELLIJ_VERSION//config/plugins
+    sudo mkdir -p /data/dev/.IdeaIC$INTELLIJ_VERSION//config/options
+    sudo chown dev:dev -R /home/developer/.IdeaIC$INTELLIJ_VERSION/
+
+    cd /home/developer/.IdeaIC$INTELLIJ_VERSION/config/plugins/
+
+   # echo 'Installing MSA plugin'
+   # wget https://github.com/MontiSecArc/intellij_msa_language_plugin/releases/download/0.8.17/IntelliJ_MSA-0.8.17.zip -O msa.zip -q && unzip -q msa.zip && rm msa.zip
+
+    #echo 'Installing GraphDatabase plugin'
+    #wget https://github.com/MontiSecArc/graphdatabase/releases/download/1.0.5/GraphDatabase-1.0.5.zip -O GraphDatabasePlugin.zip -q && unzip -q GraphDatabasePlugin.zip && rm GraphDatabasePlugin.zip
+
+    # Adding the predefined preferences to IDEA
+    cp /Users/koushik/docker/jdk.table.xml /data/dev/.IdeaIC$INTELLIJ_VERSION/config/options/jdk.table.xml
+}
+
+if [ ! -d /data/dev/.IdeaIC$INTELLIJ_VERSION//config/plugins/IntelliJ_MSA ]; then
+    # We are running with a non-Docker contained volume for IntelliJ prefs so we need to setup the plugin again
+    delayedPluginInstall
+fi
+
+if [ -d /data/dev/.IdeaIC$INTELLIJ_VERSION/ ]; then
+    # Ensure proper permissions
+    sudo chown dev:dev -R /data/dev/.IdeaIC$INTELLIJ_VERSION/
+fi
